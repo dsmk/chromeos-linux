@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 # adapted from https://gist.github.com/Zate/a6be5e5528f177b2e3e2e193b91e350c
 # but made more generic
 
@@ -10,7 +10,7 @@
 REMOTE_ROOT="https://raw.githubusercontent.com/dsmk/chromeos-linux/master"
 CHROMEOS_USER="dsmking"
 CONTAINER_NAME="test"
-SOFTWARE+"vscode docker"
+SOFTWARE+"vscode"
 CMD="code ."
 
 run_container.sh --container_name "$CONTAINER_NAME" --user "CHROMEOS_USER"
