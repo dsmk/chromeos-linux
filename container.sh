@@ -10,11 +10,20 @@
 REMOTE_ROOT="https://raw.githubusercontent.com/dsmk/chromeos-linux/master"
 CHROMEOS_USER="dsmking"
 CONTAINER_NAME="test"
-SOFTWARE="vscode"
+SOFTWARE="vscode docker"
 CMD="code ."
 
 run_container.sh --container_name "$CONTAINER_NAME" --user "$CHROMEOS_USER"
 sleep 3
+# make certain that we are privleged (and rebooted) prior to anything else 
+# this is necessary for docker to work
+# this comes from https://github.com/lxc/lxd/issues/2255
+#
+lxc config set "$CONTAINER_NAME" security.nesting true
+lxc config set "$CONTAINER_NAME" security.privileged true
+lxc stop --force "$CONTAINER_NAME"
+lxc start "$CONTAINER_NAME"
+sleep 1
 # make certain we are up to date and have the latest packages
 lxc exec "$CONTAINER_NAME" -- sh -c "apt-get update && sleep 1 && apt-get upgrade -y && sleep 1 && apt-get install wget curl -y"
 sleep 1
