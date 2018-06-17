@@ -16,7 +16,7 @@ CMD="code ."
 run_container.sh --container_name "$CONTAINER_NAME" --user "CHROMEOS_USER"
 sleep 3
 # make certain we are up to date and have the latest packages
-lxc exec "CONTAINER_NAME" -- sh -c "apt-get update && sleep 1 && apt-get upgrade -y && sleep 1 && apt-get install wget curl -y"
+lxc exec "$CONTAINER_NAME" -- sh -c "apt-get update && sleep 1 && apt-get upgrade -y && sleep 1 && apt-get install wget curl -y"
 sleep 1
 for sw in $SOFTWARE ; do
   lxc exec "$CONTAINER_NAME" -- sudo -u "$CHROMEOS_USER" bash -c "cd ~ && pwd && curl '${REMOTE_ROOT}/software/get_${sw}.sh' -o 'get_${sw}.sh' && chmod +x 'get_${sw}.sh' && './get_${sw}.sh' '$CHROMEOS_USER' "
@@ -25,7 +25,7 @@ done
 
 # now run a command as the user if requested
 if "x$CMD" != x ]; then
-  lxc exec test -- sudo su -l "$CHROMEOS_USER" -c "cd ~ && $CMD"
+  lxc exec "$CONTAINER_NAME" -- sudo su -l "$CHROMEOS_USER" -c "cd ~ && $CMD"
 fi
 
 #lxc exec test -- sudo su -l dsmking -c 'cd ~ && code .'
