@@ -11,6 +11,7 @@ REMOTE_ROOT="https://raw.githubusercontent.com/dsmk/chromeos-linux/master"
 CHROMEOS_USER="dsmking"
 CONTAINER_NAME="test"
 SOFTWARE+"vscode docker"
+CMD="code ."
 
 run_container.sh --container_name "$CONTAINER_NAME" --user "CHROMEOS_USER"
 sleep 3
@@ -21,6 +22,14 @@ for sw in $SOFTWARE ; do
   lxc exec "$CONTAINER_NAME" -- sudo -u "$CHROMEOS_USER" bash -c "cd ~ && pwd && curl '${REMOTE_ROOT}/software/get_${sw}.sh' -o 'get_${sw}.sh' && chmod +x 'get_${sw}.sh' && './get_${sw}.sh' '$CHROMEOS_USER' "
   sleep 1
 done
+
+# now run a command as the user if requested
+if "x$CMD" != x ]; then
+  lxc exec test -- sudo su -l "$CHROMEOS_USER" -c "cd ~ && $CMD"
+fi
+
+#lxc exec test -- sudo su -l dsmking -c 'cd ~ && code .'
+
 
 #lxc exec test -- sudo -u dsmking bash -c 'cd ~ && pwd && curl https://gist.githubusercontent.com/Zate/b3c8e18cbb2bbac2976d79525d95f893/raw/acbe81fe161ec194ab9eb30f1bf17f1f79919a45/get_go.sh -o get_go.sh && chmod +x get_go.sh && ./get_go.sh'
 #sleep 1
