@@ -8,9 +8,18 @@
 #fi
 
 REMOTE_ROOT="https://raw.githubusercontent.com/dsmk/chromeos-linux/master"
-CHROMEOS_USER="dsmking"
 CONTAINER_NAME="test"
+if [ "x$1" != x ]; then
+  CONTAINER_NAME="$1"
+fi
+CHROMEOS_USER="dsmking"
+if [ "x$2" != x ]; then
+  CHROMEOS_USER="$2"
+fi
 SOFTWARE="vscode docker"
+if [ "x$3" != x ]; then
+  SOFTWARE="$3"
+fi
 CMD="code ."
 
 run_container.sh --container_name "$CONTAINER_NAME" --user "$CHROMEOS_USER"
