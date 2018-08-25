@@ -3,9 +3,10 @@
 #
 set -euf -o pipefail
 
-curl -fsSL get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-
+if [ ! -d /etc/docker ]; then
+  curl -fsSL get.docker.com -o get-docker.sh
+  sudo sh get-docker.sh
+fi
 
 # make it so the chromeos user can do docker commands without becoming root
 if [ "x$1" != x ]; then
